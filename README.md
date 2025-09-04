@@ -152,4 +152,194 @@
             position: absolute;
             top: 10px;
             right: 15px;
-            font-size: 28px
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Kedaimaian</h1>
+            <p>Pesan menu favoritmu di bawah ini.</p>
+        </header>
+
+        <section id="menu-section">
+            <h2>Cemilan</h2>
+            <div id="cemilan-grid" class="menu-grid">
+                </div>
+
+            <h2>Makanan Berat</h2>
+            <div id="makanan-berat-grid" class="menu-grid">
+                </div>
+
+            <h2>Minuman</h2>
+            <div id="minuman-grid" class="menu-grid">
+                </div>
+        </section>
+
+        <section id="cart-section">
+            <h2>Keranjang Anda</h2>
+            <ul id="cart-items"></ul>
+            <p id="cart-total">Total: Rp 0</p>
+        </section>
+
+        <section id="form-section">
+            <h2>2. Isi Data Anda</h2>
+            <form id="order-form">
+                <input type="text" id="customer-name" placeholder="Nama Anda" required>
+                <input type="text" id="customer-address" placeholder="Diantar kemana / Nomor Meja" required>
+                <button type="submit" id="submit-order">Bayar dengan QRIS</button>
+            </form>
+        </section>
+    </div>
+
+    <div id="qris-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Pembayaran QRIS</h2>
+            <p>Scan QR code di bawah ini untuk membayar.</p>
+            <img src="https://www.investree.id/blog/wp-content/uploads/2021/11/QRIS-3.png.webp" alt="QRIS Code" width="200">
+            <h3 id="qris-total">Total: Rp 0</h3>
+            <small style="color:red;">Ini hanya simulasi.</small>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // --- PUSAT DATA MENU ---
+            // Ganti URL gambar dan harga sesuai menu Anda
+            const menuData = {
+                cemilan: [
+                    { name: 'Roti Bakar', price: 15000, image: 'https://via.placeholder.com/300x200.png?text=Roti+Bakar' },
+                    { name: 'Seblak', price: 18000, image: 'https://via.placeholder.com/300x200.png?text=Seblak' },
+                    { name: 'Fishcake', price: 12000, image: 'https://via.placeholder.com/300x200.png?text=Fishcake' },
+                    { name: 'Es Pisang Ijo', price: 15000, image: 'https://via.placeholder.com/300x200.png?text=Es+Pisang+Ijo' },
+                    { name: 'Jasuke', price: 10000, image: 'https://via.placeholder.com/300x200.png?text=Jasuke' }
+                ],
+                makananBerat: [
+                    { name: 'Ayam Karage', price: 28000, image: 'https://via.placeholder.com/300x200.png?text=Ayam+Karage' },
+                    { name: 'Nugget Geprek', price: 25000, image: 'https://via.placeholder.com/300x200.png?text=Nugget+Geprek' },
+                    { name: 'Bento', price: 35000, image: 'https://via.placeholder.com/300x200.png?text=Bento' }
+                ],
+                minuman: [
+                    { name: 'Dalgona', price: 20000, image: 'https://via.placeholder.com/300x200.png?text=Dalgona' },
+                    { name: 'Es Teh', price: 8000, image: 'https://via.placeholder.com/300x200.png?text=Es+Teh' },
+                    { name: 'Mojito', price: 18000, image: 'https://via.placeholder.com/300x200.png?text=Mojito' }
+                ]
+            };
+
+            const menuSection = document.getElementById('menu-section');
+            const cartItems = document.getElementById('cart-items');
+            const cartTotal = document.getElementById('cart-total');
+            const orderForm = document.getElementById('order-form');
+            const qrisModal = document.getElementById('qris-modal');
+            const qrisTotal = document.getElementById('qris-total');
+            const closeButton = document.querySelector('.close-button');
+
+            let cart = [];
+
+            function renderMenu() {
+                const cemilanGrid = document.getElementById('cemilan-grid');
+                const makananBeratGrid = document.getElementById('makanan-berat-grid');
+                const minumanGrid = document.getElementById('minuman-grid');
+
+                menuData.cemilan.forEach(item => {
+                    cemilanGrid.innerHTML += createMenuItemHTML(item);
+                });
+                menuData.makananBerat.forEach(item => {
+                    makananBeratGrid.innerHTML += createMenuItemHTML(item);
+                });
+                menuData.minuman.forEach(item => {
+                    minumanGrid.innerHTML += createMenuItemHTML(item);
+                });
+            }
+
+            function createMenuItemHTML(item) {
+                return `
+                    <div class="menu-item">
+                        <img src="${item.image}" alt="${item.name}">
+                        <h3>${item.name}</h3>
+                        <p class="price">${formatRupiah(item.price)}</p>
+                        <button class="add-to-cart-btn" data-name="${item.name}" data-price="${item.price}">Tambah</button>
+                    </div>
+                `;
+            }
+
+            function formatRupiah(angka) {
+                return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka);
+            }
+
+            function updateCartDisplay() {
+                cartItems.innerHTML = '';
+                let total = 0;
+                if (cart.length === 0) {
+                    cartItems.innerHTML = '<li>Keranjang masih kosong.</li>';
+                } else {
+                    cart.forEach((item, index) => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `
+                            <span>${item.name}</span>
+                            <span>
+                                ${formatRupiah(item.price)}
+                                <button class="delete-btn" data-index="${index}">&times;</button>
+                            </span>
+                        `;
+                        cartItems.appendChild(li);
+                        total += item.price;
+                    });
+                }
+                cartTotal.textContent = `Total: ${formatRupiah(total)}`;
+            }
+
+            menuSection.addEventListener('click', function(event) {
+                if (event.target.classList.contains('add-to-cart-btn')) {
+                    const name = event.target.dataset.name;
+                    const price = parseInt(event.target.dataset.price);
+                    cart.push({ name, price });
+                    updateCartDisplay();
+                }
+            });
+
+            cartItems.addEventListener('click', function(event) {
+                if (event.target.classList.contains('delete-btn')) {
+                    const indexToDelete = parseInt(event.target.dataset.index);
+                    cart.splice(indexToDelete, 1);
+                    updateCartDisplay();
+                }
+            });
+
+            orderForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const customerName = document.getElementById('customer-name').value;
+                const customerAddress = document.getElementById('customer-address').value;
+                if (cart.length === 0) {
+                    alert('Keranjang Anda masih kosong!'); return;
+                }
+                if (customerName === '' || customerAddress === '') {
+                    alert('Harap isi nama dan tujuan Anda!'); return;
+                }
+                const finalTotal = cart.reduce((sum, item) => sum + item.price, 0);
+                qrisTotal.textContent = `Total: ${formatRupiah(finalTotal)}`;
+                qrisModal.style.display = 'flex';
+            });
+
+            function closeModal() {
+                qrisModal.style.display = 'none';
+            }
+            closeButton.addEventListener('click', closeModal);
+            window.addEventListener('click', function(event) {
+                if (event.target == qrisModal) {
+                    closeModal();
+                }
+            });
+            
+            renderMenu();
+            updateCartDisplay();
+        });
+    </script>
+</body>
+</html>
