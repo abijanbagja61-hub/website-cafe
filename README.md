@@ -256,7 +256,6 @@
             <p>Scan QR code di bawah ini untuk membayar.</p>
             <img src="https://www.investree.id/blog/wp-content/uploads/2021/11/QRIS-3.png.webp" alt="QRIS Code" width="200">
             <h3 id="qris-total">Total: Rp 0</h3>
-            <small style="color:red;">Ini hanya simulasi.</small>
         </div>
     </div>
 
