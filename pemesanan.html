@@ -209,25 +209,24 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
 
-            // --- PUSAT DATA MENU ---
-            // Ganti URL gambar dan harga sesuai menu Anda
+            // --- PUSAT DATA MENU (HARGA SUDAH DIPERBARUI) ---
             const menuData = {
                 cemilan: [
-                    { name: 'Roti Bakar', price: 15000, image: 'https://via.placeholder.com/300x200.png?text=Roti+Bakar' },
-                    { name: 'Seblak', price: 18000, image: 'https://via.placeholder.com/300x200.png?text=Seblak' },
-                    { name: 'Fishcake', price: 12000, image: 'https://via.placeholder.com/300x200.png?text=Fishcake' },
-                    { name: 'Es Pisang Ijo', price: 15000, image: 'https://via.placeholder.com/300x200.png?text=Es+Pisang+Ijo' },
-                    { name: 'Jasuke', price: 10000, image: 'https://via.placeholder.com/300x200.png?text=Jasuke' }
+                    { name: 'Roti Bakar', price: 7000, image: 'https://via.placeholder.com/300x200.png?text=Roti+Bakar' },
+                    { name: 'Seblak', price: 10000, image: 'https://via.placeholder.com/300x200.png?text=Seblak' },
+                    { name: 'Fishcake', price: 10000, image: 'https://via.placeholder.com/300x200.png?text=Fishcake' },
+                    { name: 'Es Pisang Ijo', price: 7000, image: 'https://via.placeholder.com/300x200.png?text=Es+Pisang+Ijo' },
+                    { name: 'Jasuke', price: 6000, image: 'https://via.placeholder.com/300x200.png?text=Jasuke' }
                 ],
                 makananBerat: [
-                    { name: 'Ayam Karage', price: 28000, image: 'https://via.placeholder.com/300x200.png?text=Ayam+Karage' },
-                    { name: 'Nugget Geprek', price: 25000, image: 'https://via.placeholder.com/300x200.png?text=Nugget+Geprek' },
-                    { name: 'Bento', price: 35000, image: 'https://via.placeholder.com/300x200.png?text=Bento' }
+                    { name: 'Ayam Karage', price: 15000, image: 'https://via.placeholder.com/300x200.png?text=Ayam+Karage' },
+                    { name: 'Nugget Geprek', price: 15000, image: 'https://via.placeholder.com/300x200.png?text=Nugget+Geprek' },
+                    { name: 'Bento', price: 15000, image: 'https://via.placeholder.com/300x200.png?text=Bento' }
                 ],
                 minuman: [
-                    { name: 'Dalgona', price: 20000, image: 'https://via.placeholder.com/300x200.png?text=Dalgona' },
-                    { name: 'Es Teh', price: 8000, image: 'https://via.placeholder.com/300x200.png?text=Es+Teh' },
-                    { name: 'Mojito', price: 18000, image: 'https://via.placeholder.com/300x200.png?text=Mojito' }
+                    { name: 'Dalgona', price: 8000, image: 'https://via.placeholder.com/300x200.png?text=Dalgona' },
+                    { name: 'Es Teh', price: 4000, image: 'https://via.placeholder.com/300x200.png?text=Es+Teh' },
+                    { name: 'Mojito', price: 6000, image: 'https://via.placeholder.com/300x200.png?text=Mojito' }
                 ]
             };
 
